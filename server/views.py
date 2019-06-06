@@ -34,7 +34,7 @@ class WorksId(views.APIView):
     model = TeacherWorksPlaceModel
 
     def get(self, reqest):
-        qset = self.model.objects.filter(work__id=reqest.GET['id'])
+        qset = self.model.objects.filter(work__id=reqest.GET['id'], teacher=reqest.user)
         if (qset.count() == 0):
             return Response('')
         serializer = WorksIdSerializer(qset[0].Theme.all(), many=True)
@@ -51,7 +51,7 @@ class AddTheme(views.APIView):
     model = ThemeModel
 
     def post(self, reqest):
-        qset = TeacherWorksPlaceModel.objects.filter(work__id=reqest.data['id'])[0]
+        qset = TeacherWorksPlaceModel.objects.filter(work__id=reqest.data['id'], teacher=reqest.user)[0]
         print(qset)
         self.model.objects.create(shortDescription=reqest.data['sortDescription'],
                                   fullDescription=reqest.data['fullDescription'],

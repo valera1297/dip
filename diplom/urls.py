@@ -17,21 +17,25 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from django.conf.urls import url
+from django.conf.urls.static import static
+from django.conf import settings
 
-from server.views import User, Works, WorksId, AddTheme, WorksStudents, WorksIdStudent, AssessmentStudent,ThemeStudentTeacher
+from server.views import *
 
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include(router.urls)),
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    path('user/', User.as_view()),
-    path('works/', Works.as_view()),
-    path('worksid/', WorksId.as_view()),
-    path('addtheme/', AddTheme.as_view()),
-    path('workstudent/', WorksStudents.as_view()),
-    path('workidstudent/', WorksIdStudent.as_view()),
-    path('assessmentstudent/', AssessmentStudent.as_view()),
-    path('teacherstudent/', ThemeStudentTeacher.as_view()),
-]
+                  path('admin/', admin.site.urls),
+                  path('', include(router.urls)),
+                  url(r'^rest-auth/', include('rest_auth.urls')),
+                  path('user/', User.as_view()),
+                  path('works/', Works.as_view()),
+                  path('worksid/', WorksId.as_view()),
+                  path('addtheme/', AddTheme.as_view()),
+                  path('workstudent/', WorksStudents.as_view()),
+                  path('workidstudent/', WorksIdStudent.as_view()),
+                  path('assessmentstudent/', AssessmentStudent.as_view()),
+                  path('teacherstudent/', ThemeStudentTeacher.as_view()),
+                  path('resume/', UserResume.as_view()),
+                  path('assessmentteacher/', AssessmentTeacher.as_view()),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -11,6 +11,7 @@ from .serializers import Works as WorksSerializer
 from .serializers import WorksId as WorksIdSerializer
 from .serializers import WorksIdStudent as WorksIdStudentSerializer
 from .serializers import TeacherStudent
+from .serializers import StudentResume
 
 
 class User(views.APIView):
@@ -95,10 +96,9 @@ class AssessmentTeacher(views.APIView):
     model = MatchingTheme
 
     def post(self, reqest):
-        self.model.objects.create(student=reqest.user,
-                                  assessmentStudent=reqest.data['assessmentStudent'],
-                                  theme=ThemeModel.objects.get(id=reqest.data['id']),
-                                  noteTheme=reqest.data['noteTheme'])
+        temp = self.model.objects.get(id=reqest.data['id'])
+        temp.assessmentTeacher = reqest.data['assessmentTeacher']
+        temp.save()
         return Response('')
 
 
@@ -109,6 +109,11 @@ class ThemeStudentTeacher(views.APIView):
                                        many=True).data)
 
 
-class GetAssessmentStudent(views.APIView):
-    def get(self, reqest):
-        pass
+class UserResume(views.APIView):
+    def post(self, request):
+        request.user.resume = request.data['resume']
+        request.user.save()
+        return Response('')
+
+    def get(self, request):
+        return Response(StudentResume(request.user).data)
